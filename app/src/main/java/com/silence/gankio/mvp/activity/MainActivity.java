@@ -27,11 +27,6 @@ public class MainActivity extends BaseActivity implements MainView{
     }
 
     @Override
-    protected void setSwipeBackEnable(boolean enable) {
-        super.setSwipeBackEnable(false);
-    }
-
-    @Override
     public void NetFinish() {
 
     }

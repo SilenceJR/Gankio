@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.silence.gankio.R;
 import com.silence.gankio.base.inter.IView;
+import com.silence.gankio.widget.BaseToolBar;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -28,7 +29,7 @@ import io.reactivex.disposables.Disposable;
 
 public abstract class BaseActivity extends AppCompatActivity implements IView, BGASwipeBackHelper.Delegate {
 
-    private BaseToolbar mToolbar;
+    private BaseToolBar mToolbar;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     LinearLayout mBaseLlRoot;
     private Unbinder mBind;
@@ -47,12 +48,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, B
         mBind = ButterKnife.bind(this);
     }
 
-    protected BaseToolbar initToolBar(boolean showBlack, View toolbarView) {
+    protected BaseToolBar initToolBar(boolean showBlack, View toolbarView) {
         if (null != mToolbar) {
             new IllegalArgumentException("ToolBar is not null");
         }
 
-        mToolbar = new BaseToolbar(this);
+        mToolbar = new BaseToolBar(this);
         mToolbar.addView(toolbarView);
         mBaseLlRoot.addView(mToolbar, 0);
         setSupportActionBar(mToolbar);

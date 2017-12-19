@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -8,4 +8,48 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--ToolBar 返回键-->
+    <style name="toolbar_back">
+        <item name="android:id">@id/toolbar_back</item>
+        <item name="android:layout_width">26sp</item>
+        <item name="android:layout_height">26dp</item>
+        <item name="android:background">@drawable/icon_back</item>
+    </style>
+
+    <!--ToolBar 标题-->
+    <style name="toolbar_title">
+        <item name="android:id">@id/toolbar_title</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/normal_text_size_17sp</item>
+    </style>
+
+    <!--ToolBar Right标题-->
+    <style name="toolbar_right_title">
+        <item name="android:id">@id/toolbar_right_title</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/normal_text_size_15sp</item>
+    </style>
+
+    <!--ToolBar Right图片-->
+    <style name="toolbar_right_img">
+        <item name="android:id">@id/toolbar_right_icon</item>
+        <item name="android:layout_width">26dp</item>
+        <item name="android:layout_height">26dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
+    </style>
+
+    <dimen name="normal_text_size_17sp">17sp</dimen>
+    <dimen name="normal_text_size_15sp">15sp</dimen>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+
+    <Button style="@style/toolbar_back"/>
+
+    <TextView style="@style/toolbar_title" />
+
+    <TextView style="@style/toolbar_right_title" />
+
+    <ImageView style="@style/toolbar_right_img" />
+
+</RelativeLayout>

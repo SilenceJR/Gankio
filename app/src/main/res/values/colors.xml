@@ -5,6 +5,6 @@
     <color name="colorAccent">#FF4081</color>
 
     <!--toolbar-->
-    <color name="toolbar_start">#f7422d</color>
+    <color name="toolbar_start">#0094FF</color>
     <color name="toolbar_end">#f41f3b</color>
 </resources>
