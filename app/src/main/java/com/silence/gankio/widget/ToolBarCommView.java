@@ -28,7 +28,7 @@ public class ToolBarCommView extends RelativeLayout {
     private ImageView mIvRightIcon;
 
     public ToolBarCommView(Context context) {
-        super(context, null);
+        this(context, null);
     }
 
     public ToolBarCommView(Context context, AttributeSet attrs) {
