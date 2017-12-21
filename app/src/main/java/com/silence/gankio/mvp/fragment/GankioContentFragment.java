@@ -44,6 +44,7 @@ public class GankioContentFragment extends BaseFragment {
 
         mGankioFragment.add(new GankioAndroidFragment());
         mGankioFragment.add(new GankioWelfareFragment());
+        mGankioFragment.add(new GankioIOSFragment());
 
         GankioContentAdapter gankioContentAdapter = new GankioContentAdapter(getChildFragmentManager(), mGankioFragment, mGankioContent);
         mViewPager.setAdapter(gankioContentAdapter);

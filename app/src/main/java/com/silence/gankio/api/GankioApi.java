@@ -2,6 +2,7 @@ package com.silence.gankio.api;
 
 import com.silence.gankio.constent.NetWorkConstent;
 import com.silence.gankio.model.GankioAndroidResult;
+import com.silence.gankio.model.GankioiOSResult;
 import com.silence.gankio.model.GankioResult;
 import com.silence.gankio.model.GankioWelfareResult;
 
@@ -25,5 +26,8 @@ public interface GankioApi {
 
     @GET(NetWorkConstent.Gankio_Welfare + "{number}/{page}")
     Observable<GankioResult<List<GankioWelfareResult>>> getWelfareData(@Path("number") int number, @Path("page") int page);
+
+    @GET(NetWorkConstent.Gankio_iOS + "{number}/{page}")
+    Observable<GankioResult<List<GankioiOSResult>>> getiOSData(@Path("number") int number, @Path("page") int page);
 
 }

@@ -23,7 +23,7 @@ public interface NetWorkConstent {
     /**
      * IOS数据
      */
-    public static final String Gankio_IOS = Gankio_Data + "iOS/";
+    public static final String Gankio_iOS = Gankio_Data + "iOS/";
     /**
      * 全部数据
      */

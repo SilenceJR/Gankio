@@ -4,26 +4,27 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.List;
+
 /**
  * Created by Silence-Dell
  *
  * @time 2017/12/19 0:48
  * @des ${TODO}
  */
-
-@Entity(tableName = "GankioWelfar")
-public class GankioWelfareResult {
-
+@Entity(tableName = "GankioiOS")
+public class GankioiOSResult {
     /**
-     * _id : 5a388e4c421aa90fe2f02ced
-     * createdAt : 2017-12-19T11:58:04.567Z
-     * desc : 12-19
-     * publishedAt : 2017-12-19T12:00:28.893Z
-     * source : chrome
-     * type : 福利
-     * url : http://7xi8d6.com1.z0.glb.clouddn.com/20171219115747_tH0TN5_Screenshot.jpeg
+     * _id : 5a2e4011421aa90fe2f02cd1
+     * createdAt : 2017-12-11T16:21:37.459Z
+     * desc : 我打赌你一定没搞明白的Activity启动模式
+     * publishedAt : 2017-12-15T08:59:11.361Z
+     * source : web
+     * type : Android
+     * url : https://mp.weixin.qq.com/s?__biz=MzIwMzYwMTk1NA==&mid=2247488588&idx=1&sn=3f7c59654835ec8d560610ba97d10fc0
      * used : true
-     * who : daimajia
+     * who : 陈宇明
+     * images : ["http://img.gank.io/27c7d4a1-9c3e-42ed-9a21-051cd9f77798"]
      */
 
     @PrimaryKey
@@ -45,6 +46,8 @@ public class GankioWelfareResult {
     private boolean used;
     @ColumnInfo(name = "_who")
     private String who;
+    @ColumnInfo(name = "_images")
+    private List<String> images;
 
     public String get_id() {
         return _id;
@@ -118,9 +121,17 @@ public class GankioWelfareResult {
         this.who = who;
     }
 
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
     @Override
     public String toString() {
-        return "GankioWelfareResult{" +
+        return "GankioAndroidResult{" +
                 "_id='" + _id + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", desc='" + desc + '\'' +
@@ -130,6 +141,7 @@ public class GankioWelfareResult {
                 ", url='" + url + '\'' +
                 ", used=" + used +
                 ", who='" + who + '\'' +
+                ", images=" + images +
                 '}';
     }
 }
