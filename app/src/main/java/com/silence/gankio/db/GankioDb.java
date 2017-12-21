@@ -44,12 +44,52 @@ public class GankioDb {
         mBase.mGankioAndroidDao().getAndroidListener().observe(owner, observer);
     }
 
+    public static GankioAndroidResult queryAndroud(String id) throws ExecutionException, InterruptedException {
+        Future<GankioAndroidResult> future = mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().queryAndroid(id));
+        return future.get();
+    }
+
+    public static void allAndroidListener(LifecycleOwner owner, Observer<List<GankioAndroidResult>> observer) {
+        mBase.mGankioAndroidDao().getAllAndroidListener().observe(owner, observer);
+    }
+
     public static void delete(GankioAndroidResult gankioAndroid) {
         mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().deleteGankioAndroid(gankioAndroid));
     }
 
+//    public static void insertList(List<GankioAndroidResult> gankioAndroids) {
+//        mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().insertGankioAndroids(gankioAndroids));
+//    }
+
     public static void insert(GankioAndroidResult gankioAndroid) {
         mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().insertGankioAndroid(gankioAndroid));
+    }
+
+    public static <T extends GankioAndroidResult>void insert(Object obj) {
+        if (obj instanceof List) {
+            mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().insertGankioAndroid(((List<T>) obj)));
+        } else {
+            mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().insertGankioAndroid(((T) obj)));
+        }
+        mCachedThreadPool.submit(() -> mBase.mGankioAndroidDao().insertGankioAndroid(gankioAndroid));
+    }
+
+    public static <T> void add(Object obj) {
+        if (obj instanceof List) {
+            List<T> list = (List<T>) obj;
+
+        }
+    }
+
+    public static void add(GankioAndroidResult gankioAndroidResult) throws ExecutionException, InterruptedException {
+        GankioAndroidResult androud = queryAndroud(gankioAndroidResult.get_id());
+        if (androud == null) {
+            insert(gankioAndroidResult);
+        } else {
+            if (!androud.equals(gankioAndroidResult)) {
+                updateGankioAndroid(gankioAndroidResult);
+            }
+        }
     }
 
     public static void updateGankioAndroid(GankioAndroidResult gankioAndroid) {

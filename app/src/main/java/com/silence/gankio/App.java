@@ -2,6 +2,7 @@ package com.silence.gankio;
 
 import android.app.Application;
 
+import com.silence.gankio.db.GankioDb;
 import com.silence.gankio.utils.ToastUtil;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
@@ -19,6 +20,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ToastUtil.register(this);
+
+        GankioDb.init(this);
 
         /**
          * 必须在 Application 的 onCreate 方法中执行 BGASwipeBackHelper.init 来初始化滑动返回

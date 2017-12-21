@@ -2,6 +2,7 @@ package com.silence.gankio.mvp.presenterImp;
 
 import com.silence.gankio.base.BaseObserver;
 import com.silence.gankio.base.BasePresenter;
+import com.silence.gankio.db.GankioDb;
 import com.silence.gankio.model.GankioAndroidResult;
 import com.silence.gankio.mvp.presenter.GankioAndroidPresenter;
 import com.silence.gankio.mvp.view.GankioAndroidView;
@@ -26,7 +27,8 @@ public class GankioAndroidPresenterImpl extends BasePresenter<GankioAndroidView>
                 .getAndroidData(10, page), new BaseObserver<List<GankioAndroidResult>>(getView()) {
             @Override
             protected void onSuccess(List<GankioAndroidResult> gankioAndroidResults) {
-                getView().onAndroidSUccess(gankioAndroidResults);
+                GankioDb.add(gankioAndroidResults);
+//                getView().onAndroidSUccess(gankioAndroidResults);
             }
         });
     }

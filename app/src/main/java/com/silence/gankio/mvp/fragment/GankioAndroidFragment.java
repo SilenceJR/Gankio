@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.silence.gankio.BuildConfig;
 import com.silence.gankio.R;
 import com.silence.gankio.base.BaseFragment;
+import com.silence.gankio.db.GankioDb;
 import com.silence.gankio.model.GankioAndroidResult;
 import com.silence.gankio.mvp.adapter.GankioAndroidAdapter;
 import com.silence.gankio.mvp.presenterImp.GankioAndroidPresenterImpl;
@@ -66,6 +67,8 @@ public class GankioAndroidFragment extends BaseFragment implements GankioAndroid
             if (BuildConfig.DEBUG) Log.d("GankioAndroidFragment", url);
 
         });
+
+        GankioDb.allAndroidListener(this, gankioAndroidResults -> onAndroidSUccess(gankioAndroidResults));
     }
 
     @Override
