@@ -2,14 +2,17 @@ package com.silence.gankio.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.silence.gankio.R;
 import com.silence.gankio.base.inter.IView;
 import com.silence.gankio.widget.BaseToolBar;
@@ -17,6 +20,7 @@ import com.silence.gankio.widget.BaseToolBar;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
+import es.dmoral.toasty.Toasty;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -46,7 +50,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, B
         FrameLayout baseFl = findViewById(R.id.base_fl);
         baseFl.addView(LayoutInflater.from(this).inflate(getActivityContentView(), baseFl, false));
         mBind = ButterKnife.bind(this);
+
+        initView();
+        initDate();
     }
+
+    protected abstract void initView();
+
+    protected abstract void initDate();
 
     protected BaseToolBar initToolBar(boolean showBlack, View toolbarView) {
         if (null != mToolbar) {
@@ -66,21 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, B
         return mToolbar;
     }
 
-    protected void setToolbarBgColor(int color) {
-        if (null != mToolbar)
-            mToolbar.setBackgroundColor(color);
-    }
-
-    protected void hideToolbar() {
-        if (null != mToolbar)
-            mToolbar.setVisibility(View.GONE);
-    }
-
-    protected void initToolbarDefaultBg() {
-        if (null != mToolbar)
-            mToolbar.setDefaultRedBg();
-    }
-
     protected void initSwipeLayout() {
         mBgaSwipeBackHelper = new BGASwipeBackHelper(this, this);
         mBgaSwipeBackHelper.setSwipeBackEnable(true);//是否可用
@@ -90,9 +86,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, B
 
 
 
-    public void initRefreshLayout(SwipeRefreshLayout swipeRefreshLayout, boolean loadMoreEnable, SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
-        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-        swipeRefreshLayout.setEnabled(loadMoreEnable);
+    public void initRefreshLayout(SmartRefreshLayout smartRefreshLayout, OnRefreshListener onRefreshListener, boolean loadMoreEnable, OnLoadmoreListener onLoadmoreListener) {
+        smartRefreshLayout.setOnRefreshListener(onRefreshListener);
+        if (loadMoreEnable) {
+            smartRefreshLayout.setOnLoadmoreListener(onLoadmoreListener);
+        }
+        smartRefreshLayout.setEnableLoadmore(loadMoreEnable);
     }
     /**
      * 获取Activity的界面
@@ -100,6 +99,41 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, B
      * @return
      */
     protected abstract int getActivityContentView();
+
+    public void showToast(String msg, int type) {
+        switch (type) {
+            case ToastType.ERROR :
+                Toasty.error(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                break;
+            case ToastType.INFO:
+                Toasty.info(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                break;
+            case ToastType.NORMAL:
+                Toasty.normal(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                break;
+            case ToastType.WARNING:
+                Toasty.warning(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                break;
+            case ToastType.SUCCESS:
+                Toasty.success(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    @Override
+    public void onError(String msg, int code) {
+        showToast(msg, ToastType.ERROR);
+    }
+
+    public class ToastType {
+        public static final int ERROR = 0x01;
+        public static final int INFO = 0x02;
+        public static final int NORMAL = 0x03;
+        public static final int WARNING = 0x04;
+        public static final int SUCCESS = 0x05;
+
+    }
 
     @Override
     public void addDisposable(Disposable d) {

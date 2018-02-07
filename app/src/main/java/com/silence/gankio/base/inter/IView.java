@@ -13,5 +13,7 @@ public interface IView {
 
     void addDisposable(Disposable d);
 
-    void NetFinish();
+    void onNetFinish();
+
+    void onError(String msg, int code);
 }

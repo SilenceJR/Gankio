@@ -2,4 +2,5 @@
 <resources>
     <dimen name="toolbar_padding_left">16dp</dimen>
     <dimen name="toolbar_padding_right">16dp</dimen>
+    <dimen name="dp_15">15dp</dimen>
 </resources>

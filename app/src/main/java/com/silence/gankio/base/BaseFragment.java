@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.silence.gankio.base.inter.IView;
 
 import butterknife.ButterKnife;
@@ -40,6 +43,25 @@ public abstract class BaseFragment extends Fragment implements IView {
         super.onViewCreated(view, savedInstanceState);
         initView(view, savedInstanceState);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initData();
+    }
+
+    public void initRefreshLayout(SmartRefreshLayout smartRefreshLayout, OnRefreshListener onRefreshListener, boolean loadMoreEnable, OnLoadmoreListener onLoadmoreListener) {
+        assert ((BaseActivity) getActivity()) != null;
+        ((BaseActivity) getActivity()).initRefreshLayout(smartRefreshLayout, onRefreshListener, loadMoreEnable, onLoadmoreListener);
+    }
+
+    @Override
+    public void onError(String msg, int code) {
+        assert ((BaseActivity) getActivity()) != null;
+        ((BaseActivity) getActivity()).onError(msg, code);
+    }
+
+    protected abstract void initData();
 
     protected abstract void initView(View view, Bundle savedInstanceState);
 

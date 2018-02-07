@@ -1,11 +1,8 @@
 package com.silence.gankio.utils;
 
-import android.util.Log;
-
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.silence.gankio.BuildConfig;
 import com.silence.gankio.api.GankioApi;
-import com.silence.gankio.base.BaseObserver;
+import com.silence.gankio.base.GankIoObserver;
 import com.silence.gankio.model.GankioResult;
 
 import java.util.concurrent.TimeUnit;
@@ -30,18 +27,15 @@ public class HttpUtil {
     private static final int TIME_OUT = 10;
     public static final String BASE_URL = "http://gank.io";
 
-    private static OkHttpClient sOkHttpClient = new OkHttpClient.Builder()
+    private static OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)
-            .addInterceptor(new HttpLoggingInterceptor(message -> {
-                if (BuildConfig.DEBUG) Log.d("HttpUtil", message);
-            }
-            ).setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build();
 
     private static GankioApi gankioApi = new Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(sOkHttpClient)
+            .client(okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -56,7 +50,7 @@ public class HttpUtil {
         return gankioApi;
     }
 
-    public static <T> void load(Observable<GankioResult<T>> observable, BaseObserver<T> observer) {
+    public static <T> void load(Observable<GankioResult<T>> observable, GankIoObserver<T> observer) {
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
