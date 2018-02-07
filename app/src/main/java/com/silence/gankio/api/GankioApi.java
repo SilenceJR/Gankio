@@ -9,8 +9,11 @@ import com.silence.gankio.model.GankioWelfareResult;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 
 /**
  * Created by Silence-Dell
@@ -30,4 +33,7 @@ public interface GankioApi {
     @GET(NetWorkConstent.Gankio_iOS + "{number}/{page}")
     Observable<GankioResult<List<GankioiOSResult>>> getiOSData(@Path("number") int number, @Path("page") int page);
 
+    @Streaming
+    @GET
+    Observable<ResponseBody> download(@Url String fileUrl);
 }

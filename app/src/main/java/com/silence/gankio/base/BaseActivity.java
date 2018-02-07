@@ -93,6 +93,17 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, B
         }
         smartRefreshLayout.setEnableLoadmore(loadMoreEnable);
     }
+
+    public void onRefreshFinish(SmartRefreshLayout smartRefreshLayout) {
+        if (smartRefreshLayout.isRefreshing()) {
+            smartRefreshLayout.finishRefresh();
+        }
+
+        if (!smartRefreshLayout.isEnableRefresh()) {
+            smartRefreshLayout.setEnableRefresh(true);
+        }
+    }
+
     /**
      * 获取Activity的界面
      *

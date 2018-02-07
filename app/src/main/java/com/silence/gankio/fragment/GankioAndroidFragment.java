@@ -9,12 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.silence.gankio.BuildConfig;
 import com.silence.gankio.R;
-import com.silence.gankio.base.BaseFragment;
-import com.silence.gankio.db.GankioDb;
-import com.silence.gankio.model.GankioAndroidResult;
 import com.silence.gankio.adapter.GankioAndroidAdapter;
+import com.silence.gankio.base.BaseFragment;
+import com.silence.gankio.model.GankioAndroidResult;
+import com.silence.gankio.presenter.GankioAndroidPresenter;
 import com.silence.gankio.presenter.impl.GankioAndroidPresenterImpl;
 import com.silence.gankio.view.GankioAndroidView;
 
@@ -27,17 +30,31 @@ import butterknife.BindView;
  * @创建时间: 2017/12/20 / 15:14
  * @描述: 这是一个 GankioAndroidFragment 类.
  */
-public class GankioAndroidFragment extends BaseFragment implements GankioAndroidView, BaseQuickAdapter.RequestLoadMoreListener {
+public class GankioAndroidFragment extends BaseFragment implements GankioAndroidView, BaseQuickAdapter.RequestLoadMoreListener, OnRefreshListener {
 
 
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
+    @BindView(R.id.smart_refresh)
+    SmartRefreshLayout mSmartRefresh;
 
     private GankioAndroidAdapter mAdapter;
 
     private int page = 1;
     private boolean oneLoad = true;
-    private GankioAndroidPresenterImpl mPresenter;
+    private GankioAndroidPresenter mPresenter;
+
+    public GankioAndroidFragment() {
+    }
+
+    public static GankioAndroidFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        GankioAndroidFragment fragment = new GankioAndroidFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +62,15 @@ public class GankioAndroidFragment extends BaseFragment implements GankioAndroid
     }
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
+    protected void initData() {
+
+        mPresenter = new GankioAndroidPresenterImpl(this);
+        mPresenter.loadAndroidData(page);
+
+    }
+
+    @Override
+    protected void initView() {
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GankioAndroidAdapter(null);
         mAdapter.openLoadAnimation();
@@ -54,8 +79,7 @@ public class GankioAndroidFragment extends BaseFragment implements GankioAndroid
         mRecycler.setAdapter(mAdapter);
         //        mAdapter.disableLoadMoreIfNotFullPage();
 
-        mPresenter = new GankioAndroidPresenterImpl(this);
-        mPresenter.loadAndroidData(page);
+        initRefreshLayout(mSmartRefresh, this, false, null);
 
         initListener();
     }
@@ -68,12 +92,7 @@ public class GankioAndroidFragment extends BaseFragment implements GankioAndroid
 
         });
 
-        GankioDb.allAndroidListener(this, gankioAndroidResults -> onAndroidSUccess(gankioAndroidResults));
-    }
-
-    @Override
-    public void NetFinish() {
-
+        //        GankioDb.allAndroidListener(this, gankioAndroidResults -> onAndroidSUccess(gankioAndroidResults));
     }
 
     @Override
@@ -97,5 +116,17 @@ public class GankioAndroidFragment extends BaseFragment implements GankioAndroid
             }
         }
 
+    }
+
+    @Override
+    public void onNetFinish() {
+        onRefreshFinish(mSmartRefresh);
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        page = 1;
+        oneLoad = true;
+        mPresenter.loadAndroidData(page);
     }
 }

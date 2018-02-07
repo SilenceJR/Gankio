@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.silence.gankio.BuildConfig;
 import com.silence.gankio.R;
+import com.silence.gankio.adapter.GankioIOSAdapter;
 import com.silence.gankio.base.BaseFragment;
 import com.silence.gankio.model.GankioiOSResult;
-import com.silence.gankio.adapter.GankioIOSAdapter;
+import com.silence.gankio.presenter.GankioIOSPresenter;
 import com.silence.gankio.presenter.impl.GankioIOSPresenterImpl;
 import com.silence.gankio.view.GankioIOSView;
 
@@ -26,17 +30,31 @@ import butterknife.BindView;
  * @创建时间: 2017/12/20 / 15:14
  * @描述: 这是一个 GankioAndroidFragment 类.
  */
-public class GankioIOSFragment extends BaseFragment implements GankioIOSView, BaseQuickAdapter.RequestLoadMoreListener {
+public class GankioIOSFragment extends BaseFragment implements GankioIOSView, BaseQuickAdapter.RequestLoadMoreListener, OnRefreshListener {
 
 
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
+    @BindView(R.id.smart_refresh)
+    SmartRefreshLayout mSmartRefreshLayout;
 
     private GankioIOSAdapter mAdapter;
 
     private int page = 1;
     private boolean oneLoad = true;
-    private GankioIOSPresenterImpl mPresenter;
+    private GankioIOSPresenter mPresenter;
+
+    public GankioIOSFragment() {
+    }
+
+    public static GankioIOSFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        GankioIOSFragment fragment = new GankioIOSFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected View getContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +62,13 @@ public class GankioIOSFragment extends BaseFragment implements GankioIOSView, Ba
     }
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
+    protected void initData() {
+        mPresenter = new GankioIOSPresenterImpl(this);
+        mPresenter.loadIOSData(page);
+    }
+
+    @Override
+    protected void initView() {
         mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new GankioIOSAdapter(null);
         mAdapter.openLoadAnimation();
@@ -53,8 +77,7 @@ public class GankioIOSFragment extends BaseFragment implements GankioIOSView, Ba
         mRecycler.setAdapter(mAdapter);
         //        mAdapter.disableLoadMoreIfNotFullPage();
 
-        mPresenter = new GankioIOSPresenterImpl(this);
-        mPresenter.loadIOSData(page);
+        initRefreshLayout(mSmartRefreshLayout, this, false, null);
 
         initListener();
     }
@@ -63,14 +86,9 @@ public class GankioIOSFragment extends BaseFragment implements GankioIOSView, Ba
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
             GankioiOSResult gankioIOS = (GankioiOSResult) adapter.getData().get(position);
             String url = gankioIOS.getUrl();
-            if (BuildConfig.DEBUG) Log.d("GankioAndroidFragment", url);
+            if (BuildConfig.DEBUG) Log.d("GankioiOSFragment", url);
 
         });
-    }
-
-    @Override
-    public void NetFinish() {
-
     }
 
     @Override
@@ -94,5 +112,17 @@ public class GankioIOSFragment extends BaseFragment implements GankioIOSView, Ba
             }
         }
 
+    }
+
+    @Override
+    public void onNetFinish() {
+        onRefreshFinish(mSmartRefreshLayout);
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        page = 1;
+        oneLoad = true;
+        mPresenter.loadIOSData(page);
     }
 }

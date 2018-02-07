@@ -1,40 +1,40 @@
 package com.silence.gankio.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
 import com.silence.gankio.R;
-import com.silence.gankio.adapter.ContentPagerAdapter;
 import com.silence.gankio.base.BaseActivity;
-import com.silence.gankio.fragment.GankioContentFragment;
+import com.silence.gankio.base.BaseFragment;
+import com.silence.gankio.fragment.GankioAndroidFragment;
+import com.silence.gankio.fragment.GankioIOSFragment;
+import com.silence.gankio.fragment.GankioWelfareFragment;
 import com.silence.gankio.view.MainView;
+import com.silence.gankio.widget.TabView;
 import com.silence.gankio.widget.ToolBarCommView;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 
 public class MainActivity extends BaseActivity implements MainView {
 
     @BindView(R.id.fl_conn)
     FrameLayout mFlConn;
-    @BindView(R.id.tab_layout)
-    TabLayout mTabLayout;
+    @BindViews({R.id.tab_android, R.id.tab_ios, R.id.tab_welfare})
+    List<TabView> mTabs;
 
-    private List<Fragment> mTabFragments;
-    private String[] mTabIndicators = {"首页", "看看", "逛逛", "我的"};
+    private LinkedList<BaseFragment> mTabFragments;
+    private BaseFragment mCurrentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initContent();
 
     }
 
@@ -42,30 +42,56 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void initView() {
         initToolBar();
 
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        mTabLayout.setSelectedTabIndicatorHeight(0);
-        ViewCompat.setElevation(mTabLayout, 10);
-        mTabLayout.setupWithViewPager(mViewPager);
+        mTabFragments = new LinkedList<>();
+
+        mTabFragments.add(GankioAndroidFragment.newInstance());
+        mTabFragments.add(GankioIOSFragment.newInstance());
+        mTabFragments.add(GankioWelfareFragment.newInstance());
+
+        for (int i = 0; i < mTabs.size(); i++) {
+            TabView tabView = mTabs.get(i);
+            final BaseFragment fragment = mTabFragments.get(i);
+            final int finalI = i;
+            tabView.setOnCheckedChangeListener(new TabView.OnCheckedChangeListener() {
+                @Override
+                public void onChecked(TabView tab, boolean isChecked) {
+                    if (isChecked) {
+                        changeFragment(fragment);
+                        for (int j = 0; j < mTabs.size(); j++) {
+                            if (finalI != j) {
+                                mTabs.get(j).setChecked(false);
+                            }
+                        }
+                    }
+                }
+            });
+
+        }
+
+        mTabs.get(0).setChecked(true);
+
+
+
+
+    }
+
+    private void changeFragment(BaseFragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (null != mCurrentFragment) {
+            transaction.hide(mCurrentFragment);
+        }
+        this.mCurrentFragment = fragment;
+        if (!fragment.isAdded()) {
+            transaction.add(R.id.fl_conn, fragment, fragment.getClass().getSimpleName());
+        }
+        transaction.show(fragment).commit();
+
     }
 
     private void initToolBar() {
         ToolBarCommView toolBarCommView = new ToolBarCommView(this);
         toolBarCommView.setDefTitle().showBack(false);
         initToolBar(true, toolBarCommView).setDefaultRedBg();
-    }
-
-    private void initContent() {
-        mTabFragments = new ArrayList<>();
-
-        mTabFragments.add(new GankioContentFragment());
-        mTabFragments.add(new Fragment());
-        mTabFragments.add(new Fragment());
-        mTabFragments.add(new Fragment());
-
-        ContentPagerAdapter contentAdapter = new ContentPagerAdapter(getSupportFragmentManager(), mTabFragments, mTabIndicators);
-        mViewPager.setAdapter(contentAdapter);
-        //调用这个方法 保持viewpager 不会回收view的个数  OK
-        mViewPager.setOffscreenPageLimit(mTabFragments.size());
     }
 
     @Override

@@ -41,18 +41,27 @@ public abstract class BaseFragment extends Fragment implements IView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView(view, savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+        initView();
         initData();
     }
 
+
     public void initRefreshLayout(SmartRefreshLayout smartRefreshLayout, OnRefreshListener onRefreshListener, boolean loadMoreEnable, OnLoadmoreListener onLoadmoreListener) {
-        assert ((BaseActivity) getActivity()) != null;
-        ((BaseActivity) getActivity()).initRefreshLayout(smartRefreshLayout, onRefreshListener, loadMoreEnable, onLoadmoreListener);
+        smartRefreshLayout.setOnRefreshListener(onRefreshListener);
+        if (loadMoreEnable) {
+            smartRefreshLayout.setOnLoadmoreListener(onLoadmoreListener)
+                    .setEnableLoadmore(loadMoreEnable);
+        }
+    }
+
+    public void onRefreshFinish(SmartRefreshLayout smartRefreshLayout) {
+        if (smartRefreshLayout.isRefreshing()) {
+            smartRefreshLayout.finishRefresh();
+        }
+
+        if (!smartRefreshLayout.isEnableRefresh()) {
+            smartRefreshLayout.setEnableRefresh(true);
+        }
     }
 
     @Override
@@ -63,7 +72,7 @@ public abstract class BaseFragment extends Fragment implements IView {
 
     protected abstract void initData();
 
-    protected abstract void initView(View view, Bundle savedInstanceState);
+    protected abstract void initView();
 
     @Override
     public void addDisposable(Disposable d) {

@@ -1,9 +1,5 @@
 package com.silence.gankio.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
-
 /**
  * Created by Silence-Dell
  *
@@ -11,7 +7,6 @@ import android.arch.persistence.room.PrimaryKey;
  * @des ${TODO}
  */
 
-@Entity(tableName = "GankioWelfar")
 public class GankioWelfareResult {
 
     /**
@@ -26,24 +21,14 @@ public class GankioWelfareResult {
      * who : daimajia
      */
 
-    @PrimaryKey
-    @ColumnInfo(name = "_id")
     private String _id;
-    @ColumnInfo(name = "_createdAt")
     private String createdAt;
-    @ColumnInfo(name = "_desc")
     private String desc;
-    @ColumnInfo(name = "_publishedAt")
     private String publishedAt;
-    @ColumnInfo(name = "_source")
     private String source;
-    @ColumnInfo(name = "_type")
     private String type;
-    @ColumnInfo(name = "_url")
     private String url;
-    @ColumnInfo(name = "_used")
     private boolean used;
-    @ColumnInfo(name = "_who")
     private String who;
 
     public String get_id() {

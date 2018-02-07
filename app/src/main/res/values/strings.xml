@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Gankio</string>
+    <string name="test_download">测试下载</string>
 </resources>

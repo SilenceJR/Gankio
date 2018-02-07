@@ -14,17 +14,9 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
+
     </FrameLayout>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
-    <!--<com.ashokvarma.bottomnavigation.BottomNavigationBar-->
-        <!--android:id="@+id/bottom_navigation_bar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
+    <include layout="@layout/home_tab"/>
 
 </LinearLayout>

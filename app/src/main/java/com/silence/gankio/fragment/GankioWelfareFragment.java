@@ -8,10 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.silence.gankio.R;
+import com.silence.gankio.adapter.GankioWelfareAdapter;
 import com.silence.gankio.base.BaseFragment;
 import com.silence.gankio.model.GankioWelfareResult;
-import com.silence.gankio.adapter.GankioWelfareAdapter;
+import com.silence.gankio.presenter.GankioWelfarePresenter;
 import com.silence.gankio.presenter.impl.GankioWelfarePresenterImpl;
 import com.silence.gankio.view.GankioWelfareView;
 
@@ -24,18 +28,27 @@ import butterknife.BindView;
  * @创建时间: 2017/12/20 / 15:47
  * @描述: 这是一个 GankioWelfareFragment 类.
  */
-public class GankioWelfareFragment extends BaseFragment implements GankioWelfareView, BaseQuickAdapter.RequestLoadMoreListener {
+public class GankioWelfareFragment extends BaseFragment implements GankioWelfareView, BaseQuickAdapter.RequestLoadMoreListener, OnRefreshListener {
     @BindView(R.id.recycler)
     RecyclerView mRecycler;
+    @BindView(R.id.smart_refresh)
+    SmartRefreshLayout mSmartRefreshLayout;
     private GankioWelfareAdapter mAdapter;
-    private GankioWelfarePresenterImpl mPresenter;
+    private GankioWelfarePresenter mPresenter;
 
     private int page = 1;
     private boolean oneLoad = true;
 
-    @Override
-    public void NetFinish() {
+    public GankioWelfareFragment() {
+    }
 
+    public static GankioWelfareFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        GankioWelfareFragment fragment = new GankioWelfareFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -44,7 +57,13 @@ public class GankioWelfareFragment extends BaseFragment implements GankioWelfare
     }
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
+    protected void initData() {
+        mPresenter = new GankioWelfarePresenterImpl(this);
+        mPresenter.loadWelfareData(page);
+    }
+
+    @Override
+    protected void initView() {
         mRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mAdapter = new GankioWelfareAdapter(null);
         mAdapter.openLoadAnimation();
@@ -53,8 +72,8 @@ public class GankioWelfareFragment extends BaseFragment implements GankioWelfare
         mAdapter.setOnLoadMoreListener(this, mRecycler);
         mRecycler.setAdapter(mAdapter);
 
-        mPresenter = new GankioWelfarePresenterImpl(this);
-        mPresenter.loadWelfareData(page);
+        initRefreshLayout(mSmartRefreshLayout, this, false, null);
+
     }
 
     @Override
@@ -80,5 +99,17 @@ public class GankioWelfareFragment extends BaseFragment implements GankioWelfare
 
         }
 
+    }
+
+    @Override
+    public void onNetFinish() {
+        onRefreshFinish(mSmartRefreshLayout);
+    }
+
+    @Override
+    public void onRefresh(RefreshLayout refreshlayout) {
+        page = 1;
+        oneLoad = true;
+        mPresenter.loadWelfareData(page);
     }
 }
