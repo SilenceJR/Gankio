@@ -50,6 +50,10 @@
         <item name="android:layout_alignParentEnd" tools:targetApi="jelly_bean_mr1">true</item>
     </style>
 
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="overlapAnchor">false</item>
+    </style>
+
     <dimen name="normal_text_size_17sp">17sp</dimen>
     <dimen name="normal_text_size_15sp">15sp</dimen>
 </resources>

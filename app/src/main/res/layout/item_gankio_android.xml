@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="3dp"
+    app:cardCornerRadius="@dimen/dp_8"
+    android:layout_marginStart="@dimen/dp_6"
+    android:layout_marginLeft="@dimen/dp_6"
+    android:layout_marginEnd="@dimen/dp_6"
+    android:layout_marginRight="@dimen/dp_6"
+    android:layout_marginTop="@dimen/dp_3"
+    android:layout_marginBottom="@dimen/dp_3"
     >
 
     <RelativeLayout
@@ -20,6 +27,7 @@
             android:layout_height="100dp"
             android:maxHeight="100dp"
             android:maxWidth="100dp"
+            android:adjustViewBounds="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:scaleType="centerCrop"
@@ -34,8 +42,9 @@
             android:layout_toStartOf="@id/item_iv"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:maxLines="1"
-            tools:text="我是标题"
+            android:singleLine="true"
+            tools:text="我是标题sf反倒是风口浪尖啊飞洒发就"
+            android:textSize="@dimen/sp_18"
             android:paddingRight="8dp"
             />
 
@@ -55,6 +64,7 @@
             android:paddingTop="5dp"
             android:textColor="@android:color/black"
             tools:text="fanflkasnlanglasnganglkag"
+            android:textSize="@dimen/sp_14"
             android:paddingRight="16dp"/>
 
 

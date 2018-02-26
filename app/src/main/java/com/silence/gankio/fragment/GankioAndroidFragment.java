@@ -63,7 +63,6 @@ public class GankioAndroidFragment extends BaseFragment implements GankioAndroid
 
     @Override
     protected void initData() {
-
         mPresenter = new GankioAndroidPresenterImpl(this);
         mPresenter.loadAndroidData(page);
 

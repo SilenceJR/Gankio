@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu1"
+        android:title="check_1"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/menu2"
+        android:title="check_2"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/menu3"
+        android:title="check_3"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="withText"
+        />
+
+    <item
+        android:id="@+id/menu4"
+        android:title="check_4"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="collapseActionView"
+        />
+
+    <item
+        android:id="@+id/menu5"
+        android:title="check_5"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="never"
+        />
+
+    <group android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/menu6"
+            android:title="check_6"
+            android:icon="@mipmap/ic_launcher"
+            app:showAsAction="ifRoom"
+            />
+
+    </group>
+
+
+</menu>
